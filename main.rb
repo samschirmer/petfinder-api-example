@@ -40,7 +40,7 @@ class Pet
 		self.contact = p['contact']
 	end
 	def link
-		return "https://petfinder.com/petdetail/#{self.pf_id}".downcase
+		return "https://petfinder.com/petdetail/#{self.pf_id}"
 	end
 end
 
@@ -51,9 +51,9 @@ end
 def map_xml(node, res)
 	xml_res = Nokogiri::XML.parse(res.body)
 	collection = []
-	xml_res.xpath("//#{node}").each_with_index do |x,i|
-		h = { 'index' => i }
-		x.children.map { |c| h[c.name] = c.text.gsub('/\n/','').strip unless c.text.blank? }
+	xml_res.xpath("//#{node}").each do |x|
+		h = {}
+		x.children.map { |c| h[c.name] = c.text.strip unless c.text.blank? }
 		collection.push(h)
 	end
 	return collection
